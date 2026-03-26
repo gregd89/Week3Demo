@@ -42,7 +42,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
@@ -53,3 +53,17 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+  create_issue:
+    needs: [workflow_data, build]
+    if: failure()
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      # Create an issue and assign it to the person who triggered the workflow run
+      - uses: actions/checkout@v6
+      - name: Create a new issue
+        env:
+          LABEL: "bug"
+          GH_TOKEN: ${{github.token}}
+        run: gh issue create --title "workflow failure" --assignee "${{github.actor}}" --body "${{github.actor}} you need to fix the workflow file" --label "$LABEL"
