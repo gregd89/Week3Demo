@@ -24,7 +24,7 @@ jobs:
       - name: Print branch details
         run: |
           # GITHUB_REF is the fully formed reference (eg refs/heads/main) of the branch or tag that triggered the workflow run for pushed event
-          echo "Current branch {GITHUB_REF}"
+          echo "Current branch ${GITHUB_REF}"
           # or we can just use the short ref name of the branch or tag
           echo "Github_ref_name: ${GITHUB_REF_NAME}"
           # How about we get the person who triggered the run / push
